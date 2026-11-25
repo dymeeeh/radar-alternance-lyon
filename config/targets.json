@@ -1,0 +1,17 @@
+{
+  "_aide": "Ajoutez des entreprises : 'id' = identifiant du board public (greenhouse: boards.greenhouse.io/<id>, lever: jobs.lever.co/<id>, smartrecruiters: jobs.smartrecruiters.com/<id>). Seules les offres situées dans l'agglomération lyonnaise sont conservées.",
+  "smartrecruiters": [
+    {"name": "Devoteam", "id": "Devoteam"},
+    {"name": "Alten", "id": "Alten"},
+    {"name": "Ubisoft (Ivory Tower)", "id": "Ubisoft2"},
+    {"name": "Bosch", "id": "BoschGroup"}
+  ],
+  "lever": [
+    {"name": "Agicap", "id": "agicap"},
+    {"name": "Malt", "id": "malt"}
+  ],
+  "greenhouse": [
+    {"name": "Datadog", "id": "datadog"},
+    {"name": "Algolia", "id": "algolia"}
+  ]
+}
