@@ -15,6 +15,7 @@ import re
 import time
 from datetime import date, datetime, timezone
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 
@@ -80,6 +81,24 @@ def in_lyon_area(location: str) -> bool:
     if re.search(r"\b69\d{3}\b", loc):  # code postal du Rhône
         return True
     return any(city in loc for city in LYON_AREA)
+
+
+def unwrap_redirect(url: str) -> str:
+    """Remplace un lien de redirection publicitaire (ex. r.holeest.com/redirect?from=…)
+    par l'URL réelle de l'annonce, sans les paramètres utm_*."""
+    try:
+        p = urlsplit(url or "")
+        if "redirect" not in p.path and "holeest" not in p.netloc:
+            return url
+        q = dict(parse_qsl(p.query))
+        target = q.get("from") or q.get("url") or ""
+        if not target.startswith("http"):
+            return url
+        t = urlsplit(target)
+        qs = [(k, v) for k, v in parse_qsl(t.query) if not k.lower().startswith("utm_")]
+        return urlunsplit((t.scheme, t.netloc, t.path, urlencode(qs), ""))
+    except ValueError:
+        return url
 
 
 # --------------------------------------------------------------------------- #
@@ -238,7 +257,7 @@ def collect_lba() -> list[dict] | None:
         if contract.get("duration"):
             parts.append(f"Durée du contrat : {contract['duration']} mois")
         desc = "\n".join(parts)
-        apply_url = _dig(job, "apply", "url") or _dig(job, "identifier", "url")
+        apply_url = unwrap_redirect(_dig(job, "apply", "url") or _dig(job, "identifier", "url"))
         jid = _dig(job, "identifier", "id")
         if not apply_url and jid:
             apply_url = f"https://labonnealternance.apprentissage.beta.gouv.fr/emploi/offres_emploi_lba/{jid}"

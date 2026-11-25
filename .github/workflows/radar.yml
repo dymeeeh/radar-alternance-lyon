@@ -2,7 +2,7 @@ name: Radar Alternance Lyon
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # 06:00 UTC = 07:00 Paris (heure d'hiver), 08:00 l'été
+    - cron: "0 5 * * *"   # 05:00 UTC = 06:00 Paris l'hiver, 07:00 l'été (toujours avant la veille Claude de 07:53)
   workflow_dispatch:
     inputs:
       hours_old:

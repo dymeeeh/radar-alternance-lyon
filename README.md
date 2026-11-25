@@ -38,4 +38,4 @@ py -m venv .venv
 
 ## Automatisation
 
-`.github/workflows/radar.yml` tourne tous les jours à 06:00 UTC (07:00 Paris en hiver) et via *Actions → Run workflow*. Il ne committe dans `data/` que s'il y a de nouvelles offres.
+`.github/workflows/radar.yml` tourne tous les jours à 05:00 UTC (06:00 Paris l'hiver, 07:00 l'été) et via *Actions → Run workflow*. Il ne committe dans `data/` que s'il y a de nouvelles offres.
