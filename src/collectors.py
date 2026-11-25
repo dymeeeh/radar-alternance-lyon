@@ -225,10 +225,19 @@ def collect_lba() -> list[dict] | None:
         wp = job.get("workplace") or {}
         loc = _dig(wp, "location", "address")
         contract = job.get("contract") or {}
-        desc = "\n".join(str(x) for x in (
-            offer.get("description"), offer.get("desired_skills"), offer.get("to_be_acquired_skills"),
-            f"Durée du contrat : {contract.get('duration')} mois" if contract.get("duration") else "",
-        ) if x)
+        parts = []
+        for x in (offer.get("description"), offer.get("desired_skills"),
+                  offer.get("to_be_acquired_skills"), offer.get("access_conditions")):
+            if isinstance(x, list):
+                parts.extend(str(i) for i in x if i)
+            elif x:
+                parts.append(str(x))
+        diploma = _dig(offer, "target_diploma", "label")
+        if diploma:
+            parts.append(f"Diplôme visé : {diploma}")
+        if contract.get("duration"):
+            parts.append(f"Durée du contrat : {contract['duration']} mois")
+        desc = "\n".join(parts)
         apply_url = _dig(job, "apply", "url") or _dig(job, "identifier", "url")
         jid = _dig(job, "identifier", "id")
         if not apply_url and jid:
